@@ -16,6 +16,10 @@ class Component {
       callback(event);
     });
   }
+
+  findElement(elementName) {
+    return this._element.querySelector(`[data-element="${elementName}"]`);
+  }
 }
 
 
@@ -26,10 +30,11 @@ export default class TodoApp extends Component {
     this._render();
 
     this.on('click', 'add-item-button', (event) => {
-      let input = this._element.querySelector('[data-element="new-item-text"]');
-      let list = this._element.querySelector('[data-element="items-list"]');
+      let input = this.findElement('new-item-text');
+      let list = this.findElement('items-list');
 
       list.insertAdjacentHTML('beforeEnd', this._getItemHtml(input.value));
+      input.value = '';
     });
   }
 
@@ -47,14 +52,11 @@ export default class TodoApp extends Component {
       <div class="todo-app">
         <input data-element="new-item-text"/>
         <button data-element="add-item-button">Add todo</button>
-    
+
         <ul data-element="items-list">
-          <li data-element="item">
-            <input type="checkbox" data-element="item-checkbox" checked>
-            <span data-element="item-text">wqerqwer</span>
-          </li>
+
         </ul>
-        
+
       </div>
     `;
   }
