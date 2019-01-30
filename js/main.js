@@ -4,10 +4,10 @@ let config = {
   element: document.querySelector('[data-component="todo-app"]'),
 
   items: [
-    { checked: false, text: 'eqweqweqwe' },
-    { checked: false, text: 'eqweqweqwe' },
-    { checked: true, text: 'eqweqweqwe' },
-    { checked: false, text: 'eqweqweqwe' },
+    { id: 1, checked: false, text: 'eqweqweqwe' },
+    { id: 2, checked: false, text: 'eqweqweqwe' },
+    { id: 3, checked: true, text: 'eqweqweqwe' },
+    { id: 4, checked: false, text: 'eqweqweqwe' },
   ],
 };
 

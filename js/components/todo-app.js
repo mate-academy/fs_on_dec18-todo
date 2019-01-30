@@ -28,6 +28,7 @@ export default class TodoApp extends Component {
     super({ element });
 
     this._items = items;
+    this._lastCreatedItemId = 4;
 
     this._numberOfItems = items.length;
 
@@ -35,26 +36,30 @@ export default class TodoApp extends Component {
 
     this.on('click', 'add-item-button', (event) => {
       let input = this.findElement('new-item-text');
-      let list = this.findElement('items-list');
 
-      list.insertAdjacentHTML('beforeend', this._getItemHtml(input.value));
-      input.value = '';
+      this._lastCreatedItemId++;
 
-      this._numberOfItems++;
+      this._items.push({
+        id: this._lastCreatedItemId,
+        checked: false,
+        text: input.value
+      });
 
-      this.findElement('items-count').innerHTML = this._numberOfItems;
+      this._render();
     });
 
     this.on('change', 'item-checkbox', (event) => {
       let checkbox = event.target;
+      let itemElement = event.target.closest('[data-element="item"]');
+      let currentItemId = +itemElement.dataset.itemId
 
-      if (checkbox.checked) {
-        this._numberOfItems--;
-      } else {
-        this._numberOfItems++;
-      }
+      let currentItem = this._items.find((item) => {
+        return item.id === currentItemId;
+      });
 
-      this.findElement('items-count').innerHTML = this._numberOfItems;
+      currentItem.checked = checkbox.checked;
+
+      this._render();
     });
   }
 
@@ -62,7 +67,7 @@ export default class TodoApp extends Component {
 
   _getItemHtml(item) {
     return `
-      <li data-element="item">
+      <li data-element="item" data-item-id="${ item.id }">
         <input
           type="checkbox"
           data-element="item-checkbox"
@@ -74,10 +79,12 @@ export default class TodoApp extends Component {
   }
 
   _render() {
+    const notCheckedItems = this._items.filter(item => !item.checked);
+
     this._element.innerHTML = `
       <div class="todo-app">
         <h3>
-          <span data-element="items-count">${ this._numberOfItems }</span>
+          <span data-element="items-count">${ notCheckedItems.length }</span>
           items left
         </h3>
         <input data-element="new-item-text"/>
