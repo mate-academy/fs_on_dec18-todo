@@ -27,14 +27,19 @@ export default class TodoApp extends Component {
   constructor({ element }) {
     super({ element });
 
+    this._numberOfItems = 0;
+
     this._render();
 
     this.on('click', 'add-item-button', (event) => {
       let input = this.findElement('new-item-text');
       let list = this.findElement('items-list');
 
-      list.insertAdjacentHTML('beforeEnd', this._getItemHtml(input.value));
+      list.insertAdjacentHTML('beforeend', this._getItemHtml(input.value));
       input.value = '';
+
+      this._numberOfItems++;
+      this.findElement('items-count').innerHTML = this._numberOfItems;
     });
   }
 
@@ -50,6 +55,10 @@ export default class TodoApp extends Component {
   _render() {
     this._element.innerHTML = `
       <div class="todo-app">
+        <h3>
+          <span data-element="items-count">${ this._numberOfItems }</span>
+          items left
+        </h3>
         <input data-element="new-item-text"/>
         <button data-element="add-item-button">Add todo</button>
 
