@@ -39,9 +39,24 @@ export default class TodoApp extends Component {
       input.value = '';
 
       this._numberOfItems++;
+
+      this.findElement('items-count').innerHTML = this._numberOfItems;
+    });
+
+    this.on('change', 'item-checkbox', (event) => {
+      let checkbox = event.target;
+
+      if (checkbox.checked) {
+        this._numberOfItems--;
+      } else {
+        this._numberOfItems++;
+      }
+
       this.findElement('items-count').innerHTML = this._numberOfItems;
     });
   }
+
+
 
   _getItemHtml(text) {
     return `
@@ -65,7 +80,11 @@ export default class TodoApp extends Component {
         <ul data-element="items-list">
 
         </ul>
-
+        
+        <button>All</button>
+        <button>Completed</button>
+        <button>Not completed</button>
+        
       </div>
     `;
   }
