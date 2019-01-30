@@ -24,10 +24,12 @@ class Component {
 
 
 export default class TodoApp extends Component {
-  constructor({ element }) {
+  constructor({ element, items }) {
     super({ element });
 
-    this._numberOfItems = 0;
+    this._items = items;
+
+    this._numberOfItems = items.length;
 
     this._render();
 
@@ -58,11 +60,15 @@ export default class TodoApp extends Component {
 
 
 
-  _getItemHtml(text) {
+  _getItemHtml(item) {
     return `
       <li data-element="item">
-        <input type="checkbox" data-element="item-checkbox">
-        <span data-element="item-text">${ text }</span>
+        <input
+          type="checkbox"
+          data-element="item-checkbox"
+          ${ item.checked ? 'checked' : '' }
+        >
+        <span data-element="item-text">${ item.text }</span>
       </li>
     `;
   }
@@ -78,7 +84,11 @@ export default class TodoApp extends Component {
         <button data-element="add-item-button">Add todo</button>
 
         <ul data-element="items-list">
-
+          ${ this._items.map(item => 
+      
+            this._getItemHtml(item)
+      
+          ).join('') }
         </ul>
         
         <button>All</button>
