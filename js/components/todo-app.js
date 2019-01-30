@@ -30,37 +30,33 @@ export default class TodoApp extends Component {
     this._items = items;
     this._lastCreatedItemId = 4;
 
-    this._numberOfItems = items.length;
-
     this._render();
 
     this.on('click', 'add-item-button', (event) => {
       let input = this.findElement('new-item-text');
 
-      this._lastCreatedItemId++;
-
-      this._items.push({
-        id: this._lastCreatedItemId,
-        checked: false,
-        text: input.value
-      });
-
-      this._render();
+      this._addItem(input.value);
     });
 
     this.on('change', 'item-checkbox', (event) => {
-      let checkbox = event.target;
       let itemElement = event.target.closest('[data-element="item"]');
-      let currentItemId = +itemElement.dataset.itemId
+      let currentItemId = +itemElement.dataset.itemId;
+      let currentItem = this._items.find(item => item.id === currentItemId);
 
-      let currentItem = this._items.find((item) => {
-        return item.id === currentItemId;
-      });
-
-      currentItem.checked = checkbox.checked;
+      currentItem.checked = !currentItem.checked;
 
       this._render();
     });
+  }
+
+  _addItem(text) {
+    this._items.push({
+      id: this._lastCreatedItemId,
+      checked: false,
+      text: text,
+    });
+
+    this._render();
   }
 
 
