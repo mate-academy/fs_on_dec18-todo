@@ -1,14 +1,6 @@
-export default class TodoApp {
+class Component {
   constructor({ element }) {
     this._element = element;
-
-    console.log(this._element);
-
-    this._render();
-
-    this.on('input', 'new-item-text', (event) => {});
-    this.on('change', 'item-checkbox', (event) => {});
-    this.on('click', 'add-item-button', (event) => {});
   }
 
   on(eventName, dataElementName, callback) {
@@ -23,6 +15,31 @@ export default class TodoApp {
 
       callback(event);
     });
+  }
+}
+
+
+export default class TodoApp extends Component {
+  constructor({ element }) {
+    super({ element });
+
+    this._render();
+
+    this.on('click', 'add-item-button', (event) => {
+      let input = this._element.querySelector('[data-element="new-item-text"]');
+      let list = this._element.querySelector('[data-element="items-list"]');
+
+      list.insertAdjacentHTML('beforeEnd', this._getItemHtml(input.value));
+    });
+  }
+
+  _getItemHtml(text) {
+    return `
+      <li data-element="item">
+        <input type="checkbox" data-element="item-checkbox">
+        <span data-element="item-text">${ text }</span>
+      </li>
+    `;
   }
 
   _render() {
